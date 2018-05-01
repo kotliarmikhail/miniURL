@@ -36,5 +36,10 @@ if (file_exists(__DIR__ . '/../config/development.config.php')) {
     $appConfig = ArrayUtils::merge($appConfig, require __DIR__ . '/../config/development.config.php');
 }
 
+//error_reporting(E_ALL|E_STRICT);
+//ini_set('display_errors', '1');
+
+define("dir_app", dirname(__DIR__,1) . '/');
+
 // Run the application!
 Application::init($appConfig)->run();

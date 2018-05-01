@@ -1,0 +1,118 @@
+<?php
+
+$title = 'Analytics';
+$this->headTitle($title);?>
+
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+<?php
+
+
+//ugly counts...
+ foreach ($shortUrlInfoModels as $shortUrlInfoModel) :
+     $countMac = ($shortUrlInfoModel->getUserPlatform() == 'mac') ? ++$countMac : $countMac;
+     $countLinux = ($shortUrlInfoModel->getUserPlatform() == 'linux') ? ++$countLinux : $countLinux;
+     $countWindows = ($shortUrlInfoModel->getUserPlatform() == 'windows') ? ++$countWindows : $countWindows;
+     $countIE = ($shortUrlInfoModel->getUserAgent() == 'Internet Explorer') ? ++$countIE : $countIE;
+     $countFirefox = ($shortUrlInfoModel->getUserAgent() == 'Mozilla Firefox') ? ++$countFirefox : $countFirefox;
+     $countChrome = ($shortUrlInfoModel->getUserAgent() == 'Google Chrome') ? ++$countChrome : $countChrome;
+     $countSafari = ($shortUrlInfoModel->getUserAgent() == 'Apple Safari') ? ++$countSafari : $countSafari;
+     $countOpera = ($shortUrlInfoModel->getUserAgent() == 'Opera') ? ++$countOpera : $countOpera;
+     $countNetscape = ($shortUrlInfoModel->getUserAgent() == 'Netscape') ? ++$countNetscape : $countNetscape;
+ endforeach;
+ ?>
+
+<?php $pieColumnsUserPlatform = array(
+    'Platforms' => array(
+        'type' => 'string',
+        'label' => 'Name of Platform'
+    ),
+    'Platform' => array(
+        'type' => 'number',
+        'label' => 'Count'
+    )
+);?>
+
+<?php $pieRowsUserPlatform = array(
+    array(
+        0 => 'mac',
+        1 => $countMac,
+    ),
+    array(
+        0 => 'linux',
+        1 => $countLinux,
+    ),
+    array(
+        0 => 'windows',
+        1 => $countWindows,
+    ),
+);?>
+
+<?php $pieOptionsUserPlatform = array(
+    'title' => 'Platforms',
+    'width' => '500',
+    'height' => '500',
+    'class' => 'custom',
+    'div' => 'pie_chart_1',
+);?>
+
+<?php
+//User Agent
+$pieColumnsUserAgent = array(
+    'Platforms' => array(
+        'type' => 'string',
+        'label' => 'Name of Platform'
+    ),
+    'Count' => array(
+        'type' => 'number',
+        'label' => 'Count'
+    )
+);?>
+
+<?php $pieRowsUserAgent = [
+    [
+        0 => 'Internet Explorer',
+        1 => $countIE,
+    ],
+    [
+        0 => 'Mozilla Firefox',
+        1 => $countFirefox,
+    ],
+   [
+        0 => 'Google Chrome',
+        1 => $countChrome,
+    ],
+    [
+        0 => 'Apple Safari',
+        1 => $countSafari,
+    ],
+    [
+        0 => 'Opera',
+        1 => $countOpera,
+   ],
+    [
+        0 => 'Netscape',
+        1 => $countNetscape,
+   ]
+];
+$pieOptionsUserAgent = array(
+    'title' => 'Population',
+    'width' => '500',
+    'height' => '500',
+   'class' => 'custom',
+    'div' => 'pie_chart_2',
+);
+?>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <?= $chartPlatform->pieChart($pieColumnsUserPlatform, $pieRowsUserPlatform, $pieOptionsUserPlatform);?>
+        </div>
+        <div class="col-sm">
+            <?= $chartUserAgent->pieChart($pieColumnsUserAgent,$pieRowsUserAgent, $pieOptionsUserAgent);?>
+    </div>
+</div>
+
+
+

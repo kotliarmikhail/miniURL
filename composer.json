@@ -1,21 +1,35 @@
 {
-    "name": "zendframework/skeleton-application",
-    "description": "Skeleton Application for Zend Framework zend-mvc applications",
+    "name": "kotliarmikhail/miniURL",
+    "description": "XXX",
     "type": "project",
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "keywords": [
         "framework",
         "mvc",
-        "zf"
+        "zf3"
     ],
     "homepage": "http://framework.zend.com/",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
         "php": "^5.6 || ^7.0",
-        "zendframework/zend-component-installer": "^1.0 || ^0.7 || ^1.0.0-dev@dev",
-        "zendframework/zend-mvc": "^3.0.1",
-        "zfcampus/zf-development-mode": "^3.0"
+        "zendframework/zend-component-installer": "0.6.0",
+        "zendframework/zend-mvc": "^3.0.2",
+        "zfcampus/zf-development-mode": "^3.0",
+        "doctrine/doctrine-orm-module": "^1.1.5",
+        "doctrine/doctrine-module": "^1.2",
+        "zendframework/zend-form": "^2.9",
+        "zendframework/zend-i18n": "^2.7",
+        "zendframework/zend-mvc-plugin-flashmessenger": "^1.0",
+        "zendframework/zend-eventmanager": "^3.0",
+        "zendframework/zend-servicemanager": "^3.1",
+        "zendframework/zend-session": "^2.7",
+        "zendframework/zend-view": "^2.8",
+        "zendframework/zend-math": "^3.0",
+        "zendframework/zend-test": "^3.0",
+        "tasmaniski/zend-flash-noty-messenger": "^2.0",
+        "geoip2/geoip2": "~2.0",
+        "sohelrana820/phpgc": "dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -37,7 +51,7 @@
         "post-create-project-cmd": [
             "@development-enable"
         ],
-        "serve": "php -S 0.0.0.0:8080 -t public public/index.php",
+        "serve": "php -S 0.0.0.0:8080 -t public/ public/index.php",
         "test": "phpunit"
     }
 }

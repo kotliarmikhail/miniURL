@@ -1,0 +1,66 @@
+<?php
+$form = $this->form;
+
+
+$form->setAttribute('action', $this->url('url', array('action' => 'index')));
+$form->prepare();
+
+$form->get('long_url')->setAttributes([
+    'class' => 'form-control',
+]);
+
+$form->get('submit')->setAttributes(['class' => 'btn btn-primary']);
+
+
+?>
+    <div class="row">
+        <div class="col-md-6">
+            <?= $this->form()->openTag($form); ?>
+
+            <?= $this->formHidden($form->get('id')); ?>
+            <div class="form-group">
+                <?= $this->formLabel($form->get('long_url')); ?>
+                <?= $this->formElement($form->get('long_url')); ?>
+                <?= $this->formElementErrors($form->get('long_url')); ?>
+            </div>
+            <div class="form-group">
+                <?= $this->formElement($form->get('submit')); ?>
+            </div>
+            <?= $this->formElement($form->get('search_text_source')); ?>
+            <?= $this->form()->closeTag(); ?>
+
+        </div>
+    </div>
+
+
+
+<?= $this->flashNoty()->fire(); ?>
+
+
+    <table class="table">
+        <tr>
+            <th>Original url</th>
+            <th>Created</th>
+            <th>Clicks</th>
+            <th>Short link</th>
+            <th>Analytics</th>
+        </tr>
+        <?php foreach ($urls as $url) : ?>
+            <tr>
+                <td><a href="<?php echo $this->escapeHtml($url->getLongUrl()); ?>"
+                       target="_blank"><?php echo $this->escapeHtml($url->getLongUrl()); ?></a></td>
+                <td><?php echo $this->escapeHtml($url->getTimeCreate()); ?></td>
+                <td><?php echo $this->escapeHtml($url->getCounter()); ?></td>
+                <td><a href="<?= $this->serverUrl() . '/' . $url->getShortCode(); ?>"
+                       target="_blank"><?= $this->serverUrl() . '/' . $url->getShortCode(); ?></a></td>
+                <td>
+                    <a href="<?php echo $this->url('detail', ['action' => 'index', 'code' => $url->getShortCode()]); ?>">
+                        Analytics </a></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+
+<?= $this->paginationControl($urls,
+    'Sliding',
+    'application/partial/paginator',
+    ['route' => 'url']); ?>

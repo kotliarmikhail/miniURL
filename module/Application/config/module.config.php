@@ -1,17 +1,30 @@
 <?php
-/**
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
 
 namespace Application;
 
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\EntityManager;
 
 return [
+    'doctrine' => [
+        'driver' => [
+           'my_annotation_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [
+                    __DIR__ .  '/../src/Entity'
+                ],
+            ],
+            'orm_default' => [
+                'drivers' => [
+                     __NAMESPACE__ . '\Entity' => 'my_annotation_driver'
+                ],
+            ],
+        ],
+    ],
     'router' => [
         'routes' => [
             'home' => [
@@ -19,7 +32,7 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\UrlController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -34,11 +47,86 @@ return [
                     ],
                 ],
             ],
+
+            'url' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/url[/:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\UrlController::class,
+                        'action'        => 'index',
+                    ],
+                ],
+            ],
+
+            'code' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '[/:code]',
+                    'constraints' => [
+                        'code'     => '[|^[0-9a-zA-Z]{6,6}$|]',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\UrlController::class,
+                        'action'        => 'forward',
+                    ],
+                ],
+            ],
+
+            'detail' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/detail[/:code]',
+                    'constraints' => [
+                        'code'     => '[|^[0-9a-zA-Z]{6,6}$|]',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\DetailController::class,
+                        'action'        => 'index',
+                    ],
+                ],
+            ],
+
+            'album' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/album[/:action][/:id]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AlbumController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'default' => [
+                        'type'    => Segment::class,
+                        'options' => [
+                            'route'    => '/[/:controller][/:action]',
+                            'constraints' => [
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ],
+                            'defaults' => [
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => InvokableFactory::class,
+            Controller\AlbumController::class => Factory\AlbumControllerFactory::class,
+            Controller\UrlController::class => Factory\UrlControllerFactory::class,
+            Controller\DetailController::class => Factory\DetailControllerFactory::class,
         ],
     ],
     'view_manager' => [
